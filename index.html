@@ -5,6 +5,98 @@
 
 <style>
 body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+}
+
+.container {
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+#output {
+  margin-top: 20px;
+  font-size: 15px;
+  color: #cbd5f5;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+  <h1>AI Caption Generator</h1>
+
+  <input type="text" id="inputText" placeholder="Enter your text..." />
+
+  <button onclick="generate()">Generate Caption</button>
+
+  <p id="output"></p>
+</div>
+
+<script>
+function generate() {
+  let text = document.getElementById("inputText").value;
+
+  let captions = [
+    "✨ " + text + " looks amazing!",
+    "🔥 This vibe is next level!",
+    "💖 Loving every moment!",
+    "😎 Confidence unlocked!",
+    "🌟 Just perfect!"
+  ];
+
+  document.getElementById("output").innerHTML = captions.join("<br>");
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+<title>AI Caption Generator</title>
+
+<style>
+body {
   background: linear-gradient(135deg, #667eea, #764ba2);
   font-family: Arial, sans-serif;
   text-align: center;
