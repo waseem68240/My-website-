@@ -3,6 +3,105 @@
 <head>
 <title>AI Caption Generator</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #1d2671, #c33764);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #ff4b2b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ff416c;
+}
+
+#output {
+  margin-top: 20px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+  <h1>✨ AI Caption Generator</h1>
+
+  <input type="text" id="inputText" placeholder="Enter your text..." />
+
+  <button onclick="generate()">Generate Caption</button>
+
+  <p id="output"></p>
+</div>
+
+<script>
+function generate() {
+  let text = document.getElementById("inputText").value;
+
+  let captions = [
+    "✨ " + text + " looks stunning!",
+    "🔥 This moment is unforgettable!",
+    "💖 Pure vibes only!",
+    "😎 Style on point!",
+    "🌟 Making memories!"
+  ];
+
+  document.getElementById("output").innerHTML = captions.join("<br>");
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+<title>AI Caption Generator</title>
+
 <style>
 body {
   margin: 0;
