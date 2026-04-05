@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Caption Generator</title><style>
+<title>AI Caption Generator</title>
+
+<style>
 * {
     margin: 0;
     padding: 0;
@@ -13,133 +16,194 @@
 body {
     height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #2b0a3d, #0f3c78);
+    align-items: center;
+    background: linear-gradient(135deg, #6a00ff, #0077ff);
 }
 
+/* Glass Container */
 .container {
     width: 90%;
     max-width: 500px;
     padding: 30px;
     border-radius: 25px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
     text-align: center;
     animation: fadeIn 1s ease;
 }
 
+/* Title */
 h1 {
-    font-size: 2rem;
+    font-size: 28px;
     margin-bottom: 20px;
-    background: linear-gradient(90deg, #ff7eb3, #7afcff);
+    background: linear-gradient(90deg, #ff4dff, #00ffff);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
+/* Input */
 input {
     width: 100%;
     padding: 15px;
-    border-radius: 20px;
+    border-radius: 25px;
     border: none;
     outline: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     background: rgba(255,255,255,0.1);
-    color: #fff;
+    color: white;
+    font-size: 15px;
     transition: 0.3s;
 }
 
 input::placeholder {
-    color: #ccc;
+    color: #ddd;
 }
 
 input:focus {
-    box-shadow: 0 0 10px rgba(255,255,255,0.4);
+    box-shadow: 0 0 10px #00ffff;
 }
 
+/* Button */
 button {
-    width: 100%;
-    padding: 15px;
-    border-radius: 20px;
+    padding: 12px 25px;
+    border-radius: 25px;
     border: none;
-    background: linear-gradient(90deg, #ff4ecd, #ff8a00);
-    color: #fff;
-    font-size: 1rem;
     cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff4d4d, #ff9900);
+    color: white;
     transition: 0.3s;
 }
 
 button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255, 100, 200, 0.6);
+    box-shadow: 0 0 15px #ff6600;
 }
 
+/* Output */
 .output {
     margin-top: 20px;
-    text-align: left;
-    color: #fff;
 }
 
-.caption {
-    background: rgba(255,255,255,0.1);
-    padding: 10px;
+/* Caption Cards */
+.card {
+    padding: 12px;
+    margin-top: 10px;
     border-radius: 15px;
-    margin-bottom: 10px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
     animation: slideUp 0.5s ease;
 }
 
+/* Warning */
+.warning {
+    color: #ff4d4d;
+    margin-top: 10px;
+}
+
+/* Loader */
+.loader {
+    margin-top: 15px;
+    color: white;
+    font-size: 14px;
+}
+
+/* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
 }
 
-@media (max-width: 500px) {
-    h1 {
-        font-size: 1.5rem;
-    }
+/* Responsive */
+@media(max-width:500px){
+    h1 {font-size:22px;}
 }
-</style></head>
-<body><div class="container">
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
     <h1>AI Caption Generator</h1>
-    <input type="text" id="inputText" placeholder="Enter your text...">
-    <button onclick="generateCaptions()">Generate Caption</button><div class="output" id="output"></div>
 
-</div><script>
- <script>
-function generateCaptions() {
-    const text = document.getElementById('inputText').value.trim();
-    const output = document.getElementById('output');
+    <input type="text" id="inputText" placeholder="Enter your text...">
+
+    <button onclick="generateCaption()">Generate Caption</button>
+
+    <div id="warning" class="warning"></div>
+    <div id="loader" class="loader"></div>
+
+    <div id="output" class="output"></div>
+</div>
+
+<script>
+
+const templates = [
+    "🔥 {text} vibes only 😎✨",
+    "✨ Living for this: {text} 💖",
+    "😎 Too cool for rules – {text} 🔥",
+    "🌟 {text} energy hits different 💯",
+    "💖 Just me and {text} moments ✨",
+    "🔥 {text} but make it iconic 😎",
+    "✨ Feeling unstoppable with {text} 💥",
+    "😎 {text} mood all day 🔥",
+    "💖 Keep shining with {text} ✨",
+    "🌟 {text} = pure magic 💫"
+];
+
+function generateCaption() {
+    const input = document.getElementById("inputText").value.trim();
+    const output = document.getElementById("output");
+    const warning = document.getElementById("warning");
+    const loader = document.getElementById("loader");
 
     output.innerHTML = "";
+    warning.innerText = "";
+    loader.innerText = "";
 
-    if (text === "") {
-        output.innerHTML = '<div class="caption">⚠️ Please enter some text</div>';
+    if(input === "") {
+        warning.innerText = "⚠️ Please enter some text!";
         return;
     }
 
-    const templates = [
-        `✨ ${text} — making moments magical!`,
-        `🔥 ${text} vibes only!`,
-        `💫 Living the moment with ${text}`,
-        `🌸 ${text} but make it aesthetic`,
-        `🚀 ${text} to the next level!`,
-        `❤️ Feeling ${text} today!`
-    ];
+    loader.innerText = "Generating captions... ⏳";
 
-    for (let i = 0; i < 3; i++) {
-        const random = templates[Math.floor(Math.random() * templates.length)];
+    setTimeout(() => {
+        loader.innerText = "";
 
-        const div = document.createElement("div");
-        div.className = "caption";
-        div.innerText = random;
+        let used = [];
+        let count = Math.floor(Math.random() * 3) + 3; // 3–5 captions
 
-        output.appendChild(div);
-    }
+        for(let i=0; i<count; i++) {
+            let template;
+
+            do {
+                template = templates[Math.floor(Math.random() * templates.length)];
+            } while(used.includes(template));
+
+            used.push(template);
+
+            let caption = template.replace("{text}", input);
+
+            let div = document.createElement("div");
+            div.className = "card";
+            div.innerText = caption;
+
+            output.appendChild(div);
+        }
+
+    }, 1000);
 }
+
 </script>
+
+</body>
+</html>
