@@ -1,100 +1,127 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-<title>AI Caption Generator</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Caption Generator</title><style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-<style>
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #1d2671, #c33764);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2b0a3d, #0f3c78);
 }
 
 .container {
-  backdrop-filter: blur(15px);
-  background: rgba(255, 255, 255, 0.1);
-  padding: 30px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    text-align: center;
+    animation: fadeIn 1s ease;
 }
 
 h1 {
-  margin-bottom: 20px;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ff7eb3, #7afcff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 15px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+input:focus {
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
 button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #ff4b2b;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+    width: 100%;
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(90deg, #ff4ecd, #ff8a00);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-#output {
-  margin-top: 20px;
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 100, 200, 0.6);
 }
-</style>
 
-</head>
-
-<body>
-
-<div class="container">
-  <h1>AI Caption Generator</h1>
-
-  <input type="text" id="inputText" placeholder="Enter your text..." />
-
-  <button onclick="generate()">Generate Caption</button>
-
-  <p id="output"></p>
-</div>
-
-<script>
-<script>
-function generate() {
-  let text = document.getElementById("inputText").value;
-
-  let captions = [
-    "✨ " + text + " is pure magic!",
-    "🔥 This moment is unforgettable!",
-    "💖 Living the dream!",
-    "😎 Style speaks louder!",
-    "🌟 Shine like a star!",
-    "💫 Just vibes & good times!",
-    "📸 Capturing memories!",
-    "❤️ Feeling amazing today!",
-    "⚡ Energy on another level!",
-    "🌈 Happiness looks good!"
-  ];
-
-  let randomCaptions = [];
-
-  for (let i = 0; i < 3; i++) {
-    let random = captions[Math.floor(Math.random() * captions.length)];
-    randomCaptions.push(random);
-  }
-
-  document.getElementById("output").innerHTML = randomCaptions.join("<br>");
+.output {
+    margin-top: 20px;
+    text-align: left;
+    color: #fff;
 }
-</script>
+
+.caption {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+</style></head>
+<body><div class="container">
+    <h1>AI Caption Generator</h1>
+    <input type="text" id="inputText" placeholder="Enter your text...">
+    <button onclick="generateCaptions()">Generate Caption</button><div class="output" id="output"></div>
+
+</div><script>
+function generateCaptions() {
+    const text = document.getElementById('inputText').value;
+    const output = document.getElementById('output');
+
+    if (!text) {
+        output.innerHTML = '<div class="caption">⚠️ Please enter some text</div>';
+        return;
+    }
+
+    const templates = [
+        `✨ ${text} — making moments magical!`,
+        `🔥 ${text} vibes only!`,
+        `💫 Living the moment with ${text}`,
+        `🌸 ${text} but make it aesthetic
