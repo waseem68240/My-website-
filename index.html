@@ -124,4 +124,19 @@ function generateCaptions() {
         `✨ ${text} — making moments magical!`,
         `🔥 ${text} vibes only!`,
         `💫 Living the moment with ${text}`,
-        `🌸 ${text} but make it aesthetic
+        `🌸 ${text} but make it aesthetic`,
+        `🚀 ${text} to the next level!`,
+        `❤️ Feeling ${text} today!`
+    ];
+
+    let captions = [];
+
+    for (let i = 0; i < 3; i++) {
+        const random = templates[Math.floor(Math.random() * templates.length)];
+        captions.push(`<div class="caption">${random}</div>`);
+    }
+
+    output.innerHTML = captions.join('');
+}
+</script></body>
+</html>
