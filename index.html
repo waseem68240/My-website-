@@ -3,207 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Caption Generator</title>
-
+<title>AI Video Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+  /* 🌌 Global Styles */
+  * { box-sizing: border-box; margin:0; padding:0; font-family:'Poppins',sans-serif; }
+  body {
+    min-height:100vh;
+    display:flex; justify-content:center; align-items:center;
+    background: linear-gradient(135deg, #6a0dad, #1e90ff);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    overflow-x:hidden;
+  }
+  @keyframes gradientBG {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
 
-body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #6a00ff, #0077ff);
-}
-
-/* Glass Container */
-.container {
-    width: 90%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 25px;
+  /* ✨ Glassmorphism Container */
+  .container {
+    background: rgba(255,255,255,0.05);
     backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     animation: fadeIn 1s ease;
-}
+  }
+  @keyframes fadeIn {
+    from{opacity:0; transform: translateY(20px);}
+    to{opacity:1; transform: translateY(0);}
+  }
 
-/* Title */
-h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    background: linear-gradient(90deg, #ff4dff, #00ffff);
-    -webkit-background-clip: text;
-    color: transparent;
-}
+  h1 {
+    font-weight:600;
+    margin-bottom:20px;
+    text-align:center;
+    text-shadow: 0 0 10px #fff, 0 0 20px #6a0dad, 0 0 30px #1e90ff;
+  }
 
-/* Input */
-input {
-    width: 100%;
-    padding: 15px;
-    border-radius: 25px;
-    border: none;
-    outline: none;
-    margin-bottom: 15px;
+  input {
+    width:100%;
+    padding:12px 15px;
+    border-radius:12px;
+    border:none;
+    margin-bottom:15px;
     background: rgba(255,255,255,0.1);
-    color: white;
-    font-size: 15px;
-    transition: 0.3s;
-}
+    color:white;
+    font-size:16px;
+    outline:none;
+    transition:0.3s;
+  }
+  input:focus { background: rgba(255,255,255,0.2); }
 
-input::placeholder {
-    color: #ddd;
-}
-
-input:focus {
-    box-shadow: 0 0 10px #00ffff;
-}
-
-/* Button */
-button {
-    padding: 12px 25px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    background: linear-gradient(45deg, #ff4d4d, #ff9900);
-    color: white;
-    transition: 0.3s;
-}
-
-button:hover {
+  button {
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background: #6a0dad;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: 0 0 10px #6a0dad, 0 0 20px #1e90ff;
+    transition:0.3s;
+    position:relative;
+    overflow:hidden;
+  }
+  button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px #ff6600;
-}
+    box-shadow: 0 0 20px #fff, 0 0 30px #6a0dad, 0 0 40px #1e90ff;
+  }
+  button:disabled {
+    opacity:0.5;
+    cursor:not-allowed;
+  }
 
-/* Output */
-.output {
-    margin-top: 20px;
-}
+  .status { margin:15px 0; font-style:italic; }
 
-/* Caption Cards */
-.card {
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
-    animation: slideUp 0.5s ease;
-}
+  canvas {
+    margin-top:20px;
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+  }
 
-/* Warning */
-.warning {
-    color: #ff4d4d;
-    margin-top: 10px;
-}
+  .download-btn {
+    margin-top:15px;
+    display:none;
+  }
 
-/* Loader */
-.loader {
-    margin-top: 15px;
-    color: white;
-    font-size: 14px;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-@keyframes slideUp {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-/* Responsive */
-@media(max-width:500px){
-    h1 {font-size:22px;}
-}
+  .typing-text {
+    display:inline-block;
+    border-right:2px solid white;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 0%,50%,100%{border-color:white;} 25%,75%{border-color:transparent;} }
 
 </style>
 </head>
-
 <body>
-
 <div class="container">
-    <h1>AI Caption Generator</h1>
-
-    <input type="text" id="inputText" placeholder="Enter your text...">
-
-    <button onclick="generateCaption()">Generate Caption</button>
-
-    <div id="warning" class="warning"></div>
-    <div id="loader" class="loader"></div>
-
-    <div id="output" class="output"></div>
+  <h1>AI Video Generator</h1>
+  <input type="text" id="prompt" placeholder="Enter your video prompt...">
+  <button id="generateBtn">Generate Video</button>
+  <div class="status" id="status"></div>
+  <canvas id="videoCanvas" width="720" height="1280"></canvas>
+  <button id="downloadBtn" class="download-btn">Download Video</button>
+  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 </div>
 
 <script>
+const generateBtn = document.getElementById('generateBtn');
+const status = document.getElementById('status');
+const canvas = document.getElementById('videoCanvas');
+const ctx = canvas.getContext('2d');
+const downloadBtn = document.getElementById('downloadBtn');
+const bgMusic = document.getElementById('bgMusic');
 
-const templates = [
-    "🔥 {text} vibes only 😎✨",
-    "✨ Living for this: {text} 💖",
-    "😎 Too cool for rules – {text} 🔥",
-    "🌟 {text} energy hits different 💯",
-    "💖 Just me and {text} moments ✨",
-    "🔥 {text} but make it iconic 😎",
-    "✨ Feeling unstoppable with {text} 💥",
-    "😎 {text} mood all day 🔥",
-    "💖 Keep shining with {text} ✨",
-    "🌟 {text} = pure magic 💫"
-];
+generateBtn.addEventListener('click', async () => {
+  const prompt = document.getElementById('prompt').value.trim();
+  if(!prompt) return alert("Please enter a prompt!");
+  
+  generateBtn.disabled = true;
+  status.innerHTML = '<span class="typing-text">Generating AI Video...</span>';
+  downloadBtn.style.display = 'none';
+  
+  // Start background music
+  bgMusic.volume = 0.1;
+  bgMusic.play();
 
-function generateCaption() {
-    const input = document.getElementById("inputText").value.trim();
-    const output = document.getElementById("output");
-    const warning = document.getElementById("warning");
-    const loader = document.getElementById("loader");
+  // Split prompt into 3-5 scenes
+  const scenes = prompt.split('.').filter(s=>s.trim()).slice(0,5);
+  const sceneDuration = 3000; // 3 sec per scene
 
-    output.innerHTML = "";
-    warning.innerText = "";
-    loader.innerText = "";
+  // Speech Synthesis
+  const utterance = new SpeechSynthesisUtterance(prompt);
+  utterance.rate = 1;
+  speechSynthesis.speak(utterance);
 
-    if(input === "") {
-        warning.innerText = "⚠️ Please enter some text!";
-        return;
-    }
+  // MediaRecorder
+  const stream = canvas.captureStream(30);
+  const recorder = new MediaRecorder(stream);
+  let chunks = [];
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.start();
 
-    loader.innerText = "Generating captions... ⏳";
+  // Draw scenes
+  for(let i=0; i<scenes.length; i++){
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = `https://picsum.photos/720/1280?random=${i+1}`;
+    await new Promise(res=>img.onload=res);
 
-    setTimeout(() => {
-        loader.innerText = "";
+    // Animate fade + zoom
+    const start = performance.now();
+    await new Promise(res=>{
+      function animate(t){
+        let progress = (t - start)/sceneDuration;
+        if(progress>1) progress=1;
+        ctx.globalAlpha = progress; // fade in
+        const scale = 1 + 0.1*progress; // zoom
+        ctx.setTransform(scale,0,0,scale,canvas.width/2*(1-scale),canvas.height/2*(1-scale));
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        // Text overlay
+        ctx.setTransform(1,0,0,1,0,0);
+        ctx.fillStyle="white";
+        ctx.font="bold 60px Poppins";
+        ctx.textAlign="center";
+        ctx.fillText(scenes[i],canvas.width/2,100);
+        if(progress<1) requestAnimationFrame(animate);
+        else res();
+      }
+      animate(start);
+    });
+  }
 
-        let used = [];
-        let count = Math.floor(Math.random() * 3) + 3; // 10-15 captions
-
-        for(let i=0; i<count; i++) {
-            let template;
-
-            do {
-                template = templates[Math.floor(Math.random() * templates.length)];
-            } while(used.includes(template));
-
-            used.push(template);
-
-             let caption = template.replace("{text}", input);
-
-            let div = document.createElement("div");
-            div.className = "card";
-            div.innerText = caption;
-
-            output.appendChild(div);
-        }
-
-    }, 1000);
-}
-
+  recorder.stop();
+  recorder.onstop = e => {
+    const blob = new Blob(chunks,{type:'video/webm'});
+    const url = URL.createObjectURL(blob);
+    downloadBtn.href = url;
+    downloadBtn.download = "AI_Video.webm";
+    downloadBtn.style.display = 'inline-block';
+    status.innerText = 'Video Generated Successfully!';
+    generateBtn.disabled = false;
+    bgMusic.pause();
+  }
+});
 </script>
-
 </body>
-</html>
+    </html>
